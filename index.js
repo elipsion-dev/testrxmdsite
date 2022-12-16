@@ -7,20 +7,20 @@ const app = express();
 const passport = require('passport');
 // const GoogleStrategy = require('passport-google-oauth20').Strategy;
 require('dotenv').config();
-const sequelize=require('./models/index');
-const user_route=require('./routes/userRoutes');
-const role_route=require("./routes/roleRoutes");
-const brand_route=require("./routes/brandRoutes");
-const catagory_route=require("./routes/catagoryRoutes");
-const order_route=require("./routes/orderRoutes");
-const order_product_route=require("./routes/orderproductRoutes");
-const payment_route=require("./routes/paymentRoutes");
-const product_route=require("./routes/productRoutes");
-const product_size_route=require("./routes/productsizeRoutes");
-const shipping_route=require("./routes/shippingRoutes");
+const sequelize = require('./models/index');
+const user_route = require('./routes/userRoutes');
+const role_route = require("./routes/roleRoutes");
+const brand_route = require("./routes/brandRoutes");
+const category_route = require("./routes/categoryRoutes");
+const order_route = require("./routes/orderRoutes");
+const order_product_route = require("./routes/orderproductRoutes");
+const payment_route = require("./routes/paymentRoutes");
+const product_route = require("./routes/productRoutes");
+const product_size_route = require("./routes/productsizeRoutes");
+const shipping_route = require("./routes/shippingRoutes");
 
-const {googlePassport}=require("./auth/google");
-const Relation=require('./models/relation.model')
+const { googlePassport } = require("./auth/google");
+const Relation = require('./models/relation.model')
 
 const serverlessHandler = serverless(app);
 process.env['NODE_CONFIG_DIR'] = path.join(__dirname, '/config')
@@ -47,7 +47,7 @@ app.set('view engine', 'ejs');
 require("./routes/viewRoutes")(app);
 app.use(user_route);
 app.use(role_route);
-app.use(catagory_route);
+app.use(category_route);
 app.use(brand_route);
 app.use(product_route);
 app.use(product_size_route);
@@ -63,12 +63,12 @@ app.use((err, req, res, next) => {
     res.sendFile(path.join(__dirname, "/views/404.html"));
   }
 });
-sequelize.sync().then(async(result)=>{
+sequelize.sync().then(async (result) => {
   app.listen(port, () => {
     console.log(`Listening on port ${port}`);
   });
-}).catch(error=>{
-    console.log(error)
-  })
+}).catch(error => {
+  console.log(error)
+})
 
 module.exports = serverlessHandler;
