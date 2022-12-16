@@ -2,7 +2,7 @@
 const Product = require('./productModel')
 const ProductImage=require('./productimageModel')
 const Brand = require('./brandModel')
-const Catagory=require('./catagoryModel')
+const Category=require('./categoryModel')
 const Order=require('./orderModel')
 const ProductSize=require('./productsizeModel')
 const Shipping=require('./shippingModel')
@@ -22,11 +22,11 @@ Brand.hasMany(Product,{
 })
 Product.belongsTo(Brand)
 
-//product to catagory
-Catagory.hasMany(Product,{
-  foreignKey: 'catagoryId'
+//product to category
+Category.hasMany(Product,{
+  foreignKey: 'categoryId'
 })
-Product.belongsTo(Catagory)
+Product.belongsTo(Category)
 
 //product to order
 Order.belongsToMany(Product,{
@@ -40,11 +40,11 @@ Product.belongsToMany(Order,{
 
 //product to productsize
 ProductSize.belongsToMany(Product,{
-  through: 'ProductProductSize',
+  through: 'ProductSize',
   foreignKey: "product_sizeId",
 })
 Product.belongsToMany(ProductSize,{
-  through: 'ProductProductSize',
+  through: 'ProductSize',
   foreignKey: "productId",
 })
 

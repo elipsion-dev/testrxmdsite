@@ -1,21 +1,17 @@
 const Sequelize = require("sequelize");
 const sequelize = require("./index");
 
-const ProductSize = sequelize.define("product_size", {
+const Category = sequelize.define("category", {
 id: {
   type: Sequelize.INTEGER,
   primaryKey: true,
   autoIncrement: true,
   allowNull: false
 },
-size_id: {
-    type: Sequelize.INTEGER,
+name: {
+    type: Sequelize.STRING(45),
     allowNull: false
-},
-isActive: {
-    type: Sequelize.BOOLEAN,
-    allowNull: false
-},
+}
 });
 
-module.exports = ProductSize;
+module.exports = Category;

@@ -1,61 +1,61 @@
-const Sequalize=require('sequelize');
+const Sequelize=require('sequelize');
 const sequelize = require("./index");
 
 const User = sequelize.define("user", {
   first_name: {
-    type: Sequalize.STRING,
+    type: Sequelize.STRING,
     allowNull: false
 },
   last_name: {
-    type: Sequalize.STRING,
+    type: Sequelize.STRING,
     allowNull: false
   },
   username: {
-    type: Sequalize.STRING,
+    type: Sequelize.STRING,
     unique: true,
   },
   email: {
-    type: Sequalize.STRING,
+    type: Sequelize.STRING,
     allowNull: false,
     unique: true,
   },
   isEmailConfirmed:{
-    type: Sequalize.BOOLEAN,
+    type: Sequelize.BOOLEAN,
     defaultValue: false,
   },
   password: {
-    type: Sequalize.STRING,
+    type: Sequelize.STRING,
   },
   googleId: {
-    type: Sequalize.STRING,
+    type: Sequelize.STRING,
   },
   isLocalAuth:{
-    type: Sequalize.BOOLEAN,
+    type: Sequelize.BOOLEAN,
     defaultValue: false,
   },
   address: {
-    type: Sequalize.STRING
+    type: Sequelize.STRING
   },
   apt: {
-      type: Sequalize.STRING
+      type: Sequelize.STRING
   },
   city: {
-      type: Sequalize.STRING
+      type: Sequelize.STRING
   },
   zip_code: {
-      type: Sequalize.STRING
+      type: Sequelize.STRING
   },
   state: {
-      type: Sequalize.STRING
+      type: Sequelize.STRING
   },
   country: {
-      type: Sequalize.STRING
+      type: Sequelize.STRING
   },
   phone_number: {
-      type: Sequalize.INTEGER
+      type: Sequelize.INTEGER
   },
   active: {
-      type: Sequalize.TINYINT
+      type: Sequelize.TINYINT
   },
 });
 module.exports = User;

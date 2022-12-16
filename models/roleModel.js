@@ -1,15 +1,15 @@
-const Sequalize = require("sequelize");
+const Sequelize = require("sequelize");
 const sequelize = require("./index");
 
 const Role = sequelize.define("role", {
 id: {
-  type: Sequalize.INTEGER,
+  type: Sequelize.INTEGER,
   primaryKey: true,
   autoIncrement: true,
   allowNull: false
 },
 role: {
-    type: Sequalize.STRING(45),
+    type: Sequelize.STRING(45),
     allowNull: false
 }
 });

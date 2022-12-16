@@ -36,8 +36,8 @@ const hashPassword=async(password)=>{
 const isEmailVerified=async(email)=>{
     console.log(email)
     const user= await User.findOne({where:{email:email}})
-    console.log(user?.isEmailConfirmed)
-    return user?.isEmailConfirmed
+    console.log(user.isEmailConfirmed)
+    return user.isEmailConfirmed
 }
 const userIp=async(request)=>{
     let ip = request.headers["x-forwarded-for"] ||

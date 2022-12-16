@@ -1,40 +1,40 @@
-const Sequalize = require("sequelize");
+const Sequelize = require("sequelize");
 const sequelize = require("./index");
 
 const Product = sequelize.define("product", {
 id: {
-  type: Sequalize.INTEGER,
+  type: Sequelize.INTEGER,
   primaryKey: true,
   autoIncrement: true,
   allowNull: false
   },
 name: {
-  type: Sequalize.STRING,
+  type: Sequelize.STRING,
   allowNull: false,
 },
 price: {
-  type: Sequalize.DECIMAL,
+  type: Sequelize.DECIMAL,
   allowNull: false
 },
 discount:{
-  type: Sequalize.TINYINT,
+  type: Sequelize.TINYINT,
   allowNull: false,
   defaultValue: 0
 },
 description: {
-  type: Sequalize.STRING,
+  type: Sequelize.STRING,
 },
 active: {
-  type: Sequalize.BOOLEAN,
+  type: Sequelize.BOOLEAN,
   allowNull: false,
   defaultValue: true
 },
 stock: {
-  type: Sequalize.INTEGER,
+  type: Sequelize.INTEGER,
   allowNull: false,
 },
 quantity: {
-  type: Sequalize.INTEGER,
+  type: Sequelize.INTEGER,
   defaultValue: 0,
   },
 });

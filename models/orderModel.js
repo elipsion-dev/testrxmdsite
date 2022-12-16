@@ -1,26 +1,26 @@
-const Sequalize = require("sequelize");
+const Sequelize = require("sequelize");
 const sequelize = require("./index");
 
 const Order = sequelize.define("order", {
   id: {
-    type: Sequalize.INTEGER,
+    type: Sequelize.INTEGER,
     primaryKey: true,
     autoIncrement: true,
     allowNull: false,
   },
   quantity: {
-    type: Sequalize.INTEGER,
+    type: Sequelize.INTEGER,
     allowNull: false,
   },
   tax: {
-    type: Sequalize.DECIMAL,
+    type: Sequelize.DECIMAL,
   },
   totalPrice: {
-    type: Sequalize.FLOAT,
+    type: Sequelize.FLOAT,
     allowNull: false,
   },
   orderDate: {
-    type: Sequalize.DATE,
+    type: Sequelize.DATE,
     allowNull: false,
   },
 });
