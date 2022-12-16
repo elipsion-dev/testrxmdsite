@@ -1,15 +1,15 @@
-const Sequelize = require("sequelize");
+const Sequalize = require("sequelize");
 const sequelize = require("./index");
 
 const Payment = sequelize.define("payment", {
 id: {
-  type: Sequelize.INTEGER,
+  type: Sequalize.INTEGER,
   primaryKey: true,
   autoIncrement: true,
   allowNull: false
 },
-name: {
-  type: Sequelize.STRING(45),
+payment_method: {
+  type: Sequalize.STRING,
   allowNull: false
 }
 });

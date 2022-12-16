@@ -2,11 +2,11 @@ const User=require('../models/userModel')
 const jwt= require('jsonwebtoken')
 const bcrypt= require('bcryptjs')
 const isEmailExist=async(email)=>{
-        const user = await User.findOne({where:{email:email}})
+        const user = await User.findOne({where:{email:email},include: ["role"]})
         return user 
 }
 const isUsernameExist=async(username)=>{
-    const user = await User.findOne({where:{username:username}})
+    const user = await User.findOne({where:{username:username},include: ["role"]})
     return user 
 }
 const isPasswordCorrect=async(incomingPassword,existingPassword)=>{
@@ -16,9 +16,13 @@ const isPasswordCorrect=async(incomingPassword,existingPassword)=>{
 }
 //check which data to sign
 const issueToken = async function(id,role,key) {
-    const token = jwt.sign({ sub:id,role}, key,{expiresIn: '1h' });
+    const token = jwt.sign({ sub:id,role}, key,{expiresIn: '24h' });
     return token
   }
+const issueLongtimeToken = async function(id,role,key) {
+    const token = jwt.sign({ sub:id,role}, key,{expiresIn: '720h' });
+    return token
+}
 const isTokenValid= async function(token) {
     const user=jwt.verify(token, process.env.SECRET, (err, user) => {
         if (err) {
@@ -33,13 +37,18 @@ const hashPassword=async(password)=>{
     const hashed=await bcrypt.hash(password, salt);
     return hashed;
 }
-const isEmailVerified=async(email)=>{
-    console.log(email)
-    const user= await User.findOne({where:{email:email}})
-    console.log(user.isEmailConfirmed)
-    return user.isEmailConfirmed
+const isUserAdmin=(req)=>{
+    if(req?.user?.role==="admin")
+    {
+        return true;
+    }
+    return false;
 }
-const userIp=async(request)=>{
+const isEmailVerified=async(email)=>{
+    const user= await User.findOne({where:{email:email}})
+    return user?.isEmailConfirmed
+}
+const userIp=(request)=>{
     let ip = request.headers["x-forwarded-for"] ||
      request.socket.remoteAddress;
      return ip
@@ -52,7 +61,9 @@ module.exports={
     isPasswordCorrect,
     isEmailVerified,
     issueToken,
+    issueLongtimeToken,
     hashPassword,
     userIp,
+    isUserAdmin,
     isTokenValid
 }

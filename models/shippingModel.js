@@ -1,17 +1,17 @@
-const Sequelize = require("sequelize");
+const Sequalize = require("sequelize");
 const sequelize = require("./index");
 
 const Shipping = sequelize.define("shipping", {
 id: {
-  type: Sequelize.INTEGER,
+  type: Sequalize.INTEGER,
   primaryKey: true,
   autoIncrement: true,
   allowNull: false
 },
 name: {
-    type: Sequelize.STRING(45),
-    allowNull: false
-}
+  type: Sequalize.STRING,
+  allowNull: false
+},
 });
 
 module.exports = Shipping;

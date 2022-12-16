@@ -27,8 +27,22 @@ const loginValidate = () => {
     ).isLength({ min: 6 }),
   ];
 };
+<<<<<<< HEAD
 
+=======
+const passwordChangeValidate = () => {
+  return [
+    check("old_password", "old password is required").not().isEmpty(),
+    check("new_password", "new password is required").not().isEmpty(),
+    check(
+      "new_password",
+      "Please enter a password with 6 or more characters"
+    ).isLength({ min: 6 }),
+  ];
+};
+>>>>>>> 637cb484060fd9afe54545ce0a85675349115aa6
 module.exports = {
   registerValidate,
   loginValidate,
+  passwordChangeValidate
 };
