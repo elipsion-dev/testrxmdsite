@@ -112,7 +112,11 @@
                         <h3 class="text-black-333 pt-10 mt-0 mb-30">Not Yet a Member? Click Here to Register Now!</h3>
                       </a>
                     </div>
-                    <form form action="/login" method="post" class="clearfix">
+                    <form form action="#" method="post" class="clearfix">
+                      <!-- display error need styling -->
+                      <div id="login_error" class="alert alert-danger d-none" role="alert">
+                      </div>
+                             <!--  -->
                       <div class="row">
                         <div class="mb-3 col-md-12">
                           <label for="login_email">Email</label>
@@ -131,6 +135,11 @@
                           <input id="rememberme" name="rememberme" type="checkbox">
                           Remember me </label>
                       </div>
+                      <!-- login with google need styling -->
+                      <div class="mb-3 tm-sc-button mt-10">
+                        <a href="/auth/google" class="btn btn-outline-primary">Sign in with google </a>
+                      </div>
+                      <!--  -->
                       <div class="mb-3 tm-sc-button mt-10">
                         <button type="submit" class="btn btn-theme-colored1">Login</button>
                       </div>
@@ -177,7 +186,9 @@
         <!-- Footer Scripts -->
         <script src="js/index.js"></script>
         <script src="js/custom.js"></script>
-
+        <script src="js/api_call.js"></script>
 </body>
 
 </html>
+
+
