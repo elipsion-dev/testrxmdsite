@@ -42,8 +42,8 @@ module.exports = (app) => {
     res.render(path.join(__dirname, "..", "/views/pages/shop-product-details"));
   });
 
-  router.get("/cc", function (req, res) {
-    res.render(path.join(__dirname, "..", "/views/pages/cc"));
+  router.get("/forgotpw", function (req, res) {
+    res.render(path.join(__dirname, "..", "/views/pages/forgotPassword"));
   });
 
   router.get("/login", function (req, res) {
