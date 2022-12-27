@@ -27,21 +27,21 @@ module.exports = (app) => {
     res.redirect("https://form.jotform.com/212587273457161");
   });
 
-  router.get("/shop", function (req, res) {
-    res.render(path.join(__dirname, "..", "/views/pages/shop"));
-  });
+  // router.get("/shop", function (req, res) {
+  //   res.render(path.join(__dirname, "..", "/views/pages/shop"));
+  // });
 
-  router.get("/cart", authenticateJWT,function (req, res) {
-    res.render(path.join(__dirname, "..", "/views/pages/shop-cart"));
-  });
+  // router.get("/cart", authenticateJWT,function (req, res) {
+  //   res.render(path.join(__dirname, "..", "/views/pages/shop-cart"));
+  // });
 
   router.get("/checkout", function (req, res) {
     res.render(path.join(__dirname, "..", "/views/pages/shop-checkout"));
   });
 
-  router.get("/products/details", function (req, res) {
-    res.render(path.join(__dirname, "..", "/views/pages/shop-product-details"));
-  });
+  // router.get("/products/details", function (req, res) {
+  //   res.render(path.join(__dirname, "..", "/views/pages/shop-product-details"));
+  // });
 
   router.get("/forgotpw", function (req, res) {
     res.render(path.join(__dirname, "..", "/views/pages/forgotPassword"));
