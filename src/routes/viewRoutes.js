@@ -71,5 +71,9 @@ module.exports = (app) => {
     res.render(path.join(__dirname, "..", "/views/pages/privacyPolicy"));
   });
 
+  router.get("/tos", function (req, res) {
+    res.render(path.join(__dirname, "..", "/views/pages/tos"));
+  });
+
   app.use("/", router);
 };
