@@ -5,5 +5,5 @@ const categoryValidate = () => {
 };
 
 module.exports = {
-  categoryValidate
+  categoryValidate,
 };

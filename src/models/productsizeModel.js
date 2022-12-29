@@ -6,13 +6,12 @@ const ProductSize = sequelize.define("product_size", {
     type: Sequelize.INTEGER,
     primaryKey: true,
     autoIncrement: true,
-    allowNull: false
+    allowNull: false,
   },
   size: {
     type: Sequelize.INTEGER,
-    allowNull: false
+    allowNull: false,
   },
-  
 });
 
 module.exports = ProductSize;

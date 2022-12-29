@@ -1,20 +1,20 @@
 const express = require("express");
 const logger = require("morgan");
-const path = require("path")
+const path = require("path");
 const cors = require("cors");
 const app = express();
-const cookieParser=require('cookie-parser')
-const passport = require('passport');
+const cookieParser = require("cookie-parser");
+const passport = require("passport");
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 const { window } = new JSDOM();
-const { document } = (new JSDOM('')).window;
+const { document } = new JSDOM("").window;
 global.document = document;
-let $ = jQuery = require('jquery')(window);
-require('dotenv').config();
+let $ = (jQuery = require("jquery")(window));
+require("dotenv").config();
 
-const sequelize = require('./models/index');
-const user_route = require('./routes/userRoutes');
+const sequelize = require("./models/index");
+const user_route = require("./routes/userRoutes");
 const role_route = require("./routes/roleRoutes");
 const brand_route = require("./routes/brandRoutes");
 const category_route = require("./routes/categoryRoutes");
@@ -26,13 +26,15 @@ const product_size_route = require("./routes/productsizeRoutes");
 const shipping_route = require("./routes/shippingRoutes");
 
 const { googlePassport } = require("./auth/google");
-const Relation = require('./models/relation.model')
+const Relation = require("./models/relation.model");
 
-
-
-process.env['NODE_CONFIG_DIR'] = path.join(__dirname, '/config')
+process.env["NODE_CONFIG_DIR"] = path.join(__dirname, "/config");
 var corsOptions = {
-  origin: ["http://localhost:8081","https://rxmdsite-production.up.railway.app","http://localhost:7000"]
+  origin: [
+    "http://localhost:8081",
+    "https://rxmdsite-production.up.railway.app",
+    "http://localhost:7000",
+  ],
 };
 
 app.use(cors(corsOptions));
@@ -46,10 +48,10 @@ app.use(express.static(path.join(__dirname, "../public")));
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser())
+app.use(cookieParser());
 
 // set the view engine to ejs
-app.set('view engine', 'ejs');
+app.set("view engine", "ejs");
 
 // Routes
 require("./routes/viewRoutes")(app);
@@ -63,7 +65,7 @@ app.use(order_product_route);
 app.use(order_route);
 app.use(shipping_route);
 app.use(payment_route);
-Relation()
+Relation();
 
 // Handle unauthorized requests
 const port = process.env.PORT || 7000;
@@ -73,33 +75,36 @@ app.use((err, req, res, next) => {
   }
 });
 
-sequelize.sync().then(async (result) => {
-  app.listen(port, () => {
-    //..........remove below when done..............///
-    //.........create admin role and admin user...........///
-    //......this should be removed once it create the admin role and admin user.....///
-const Role = require("./models/roleModel");
+sequelize
+  .sync()
+  .then(async (result) => {
+    app.listen(port, () => {
+      //..........remove below when done..............///
+      //.........create admin role and admin user...........///
+      //......this should be removed once it create the admin role and admin user.....///
+      const Role = require("./models/roleModel");
 
-const addAdminRole = async () => {
-  const isAdmin = await Role.findOne({ where: { role: "admin" } })
-  if (!isAdmin) {
-    await Role.create({
-      role: "admin",
-    })
-  }
-  const isUser = await Role.findOne({ where: { role: "user" } })
-  if (!isUser) {
-    await Role.create({
-      role: "user",
-    })
-  }
-  return
-}
-addAdminRole()
-//................. should be removed after the first excution..........///
-//................remove above when done.............................
-    console.log(`Listening on port ${port}`);
+      const addAdminRole = async () => {
+        const isAdmin = await Role.findOne({ where: { role: "admin" } });
+        if (!isAdmin) {
+          await Role.create({
+            role: "admin",
+          });
+        }
+        const isUser = await Role.findOne({ where: { role: "user" } });
+        if (!isUser) {
+          await Role.create({
+            role: "user",
+          });
+        }
+        return;
+      };
+      addAdminRole();
+      //................. should be removed after the first excution..........///
+      //................remove above when done.............................
+      console.log(`Listening on port ${port}`);
+    });
+  })
+  .catch((error) => {
+    console.log(error);
   });
-}).catch(error => {
-  console.log(error)
-})

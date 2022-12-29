@@ -24,10 +24,10 @@
 </div>
 
 <script>
-document.querySelectorAll("input[type='checkbox']").forEach(checkbox => {
-    checkbox.onclick = () => {
-        checkbox.value = checkbox.checked ? 'true' : 'false';
-    };
-});
+    document.querySelectorAll("input[type='checkbox']").forEach(checkbox => {
+        checkbox.onclick = () => {
+            checkbox.value = checkbox.checked ? 'true' : 'false';
+        };
+    });
 </script>
 {% endblock %}

@@ -6,12 +6,12 @@ const Brand = sequelize.define("brand", {
     type: Sequelize.INTEGER,
     primaryKey: true,
     autoIncrement: true,
-    allowNull: false
+    allowNull: false,
   },
   brand_name: {
     type: Sequelize.STRING,
-    allowNull: false
-  }
+    allowNull: false,
+  },
 });
 
 module.exports = Brand;

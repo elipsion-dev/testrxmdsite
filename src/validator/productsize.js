@@ -5,5 +5,5 @@ const productsizeValidate = () => {
 };
 
 module.exports = {
-  productsizeValidate
+  productsizeValidate,
 };

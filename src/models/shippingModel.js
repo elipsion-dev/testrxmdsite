@@ -6,11 +6,11 @@ const Shipping = sequelize.define("shipping", {
     type: Sequelize.INTEGER,
     primaryKey: true,
     autoIncrement: true,
-    allowNull: false
+    allowNull: false,
   },
   name: {
     type: Sequelize.STRING,
-    allowNull: false
+    allowNull: false,
   },
 });
 

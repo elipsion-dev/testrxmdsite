@@ -5,5 +5,5 @@ const brandValidate = () => {
 };
 
 module.exports = {
-  brandValidate
+  brandValidate,
 };

@@ -5,5 +5,5 @@ const shippingValidate = () => {
 };
 
 module.exports = {
-  shippingValidate
+  shippingValidate,
 };
