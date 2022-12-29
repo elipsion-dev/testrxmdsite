@@ -1,13 +1,15 @@
 const Product = require("./productModel");
 const Orderproduct = require("./orderproduct");
-// const Brand = require('./brandModel')
-// const Category = require('./categoryModel')
 const Order = require("./orderModel");
-const ProductSize = require("./productsizeModel");
-const Shipping = require("./shippingModel");
 const Payment = require("./paymentModel");
 const User = require("./userModel");
 const Role = require("./roleModel");
+
+//UNUSED SHOP STUFF - SAVE FOR LATER
+// const ProductSize = require("./productsizeModel");
+// const Shipping = require("./shippingModel");
+// const Brand = require('./brandModel')
+// const Category = require('./categoryModel')
 
 const Relation = () => {
   //product to brand
@@ -37,14 +39,15 @@ const Relation = () => {
   });
 
   //product to productsize
-  ProductSize.belongsToMany(Product, {
-    through: "ProductSize",
-    foreignKey: "product_sizeId",
-  });
-  Product.belongsToMany(ProductSize, {
-    through: "ProductSize",
-    foreignKey: "productId",
-  });
+  // ProductSize.belongsToMany(Product, {
+  //   through: "ProductSize",
+  //   foreignKey: "product_sizeId",
+  // });
+  // Product.belongsToMany(ProductSize, {
+  //   through: "ProductSize",
+  //   foreignKey: "productId",
+  // });
+
   //orderproduct to order
   Order.hasMany(Orderproduct, {
     foreignKey: "orderId",
@@ -54,12 +57,12 @@ const Relation = () => {
   });
 
   //order to shipping
-  Shipping.hasMany(Order, {
-    foreignKey: "shippingId",
-  });
-  Order.belongsTo(Shipping, {
-    foreignKey: "shippingId",
-  });
+  // Shipping.hasMany(Order, {
+  //   foreignKey: "shippingId",
+  // });
+  // Order.belongsTo(Shipping, {
+  //   foreignKey: "shippingId",
+  // });
 
   //order to payment
   Payment.hasMany(Order, {

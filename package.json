@@ -65,7 +65,5 @@
     "url": "https://github.com/elipsion-dev/testrxmdsite/issues"
   },
   "homepage": "https://github.com/elipsion-dev/testrxmdsite#readme",
-  "devDependencies": {
-    "purgecss": "^5.0.0"
-  }
+  "devDependencies": {}
 }

@@ -1,7 +1,7 @@
 const Shipping = require("../models/shippingModel");
 const { validationResult } = require("express-validator");
 
-exports.crerateShipping = async (req, res, next) => {
+exports.createShipping = async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

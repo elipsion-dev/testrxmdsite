@@ -1,5 +1,10 @@
 exports.authAdmin = (req, res, next) => {
-  const userrole = req.user.role;
+  let userz = req.user
+  for (const key in userz) {
+    if (userz.hasOwnProperty(key)) {
+      console.log(`${key}: ${userz[key]}`);
+    }
+  }
   if (userrole === "admin") {
     next();
     return;

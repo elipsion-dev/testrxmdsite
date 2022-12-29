@@ -16,14 +16,14 @@ require("dotenv").config();
 const sequelize = require("./models/index");
 const user_route = require("./routes/userRoutes");
 const role_route = require("./routes/roleRoutes");
-const brand_route = require("./routes/brandRoutes");
-const category_route = require("./routes/categoryRoutes");
 const order_route = require("./routes/orderRoutes");
 const order_product_route = require("./routes/orderproductRoutes");
 const payment_route = require("./routes/paymentRoutes");
 const product_route = require("./routes/productRoutes");
-const product_size_route = require("./routes/productsizeRoutes");
-const shipping_route = require("./routes/shippingRoutes");
+// const product_size_route = require("./routes/productsizeRoutes");
+// const shipping_route = require("./routes/shippingRoutes");
+// const brand_route = require("./routes/brandRoutes");
+// const category_route = require("./routes/categoryRoutes");
 
 const { googlePassport } = require("./auth/google");
 const Relation = require("./models/relation.model");
@@ -57,14 +57,16 @@ app.set("view engine", "ejs");
 require("./routes/viewRoutes")(app);
 app.use(user_route);
 app.use(role_route);
-app.use(category_route);
-app.use(brand_route);
+app.use(payment_route);
 app.use(product_route);
-app.use(product_size_route);
 app.use(order_product_route);
 app.use(order_route);
-app.use(shipping_route);
-app.use(payment_route);
+
+// UNUSED SHOP ROUTES FOR LATER
+// app.use(shipping_route);
+// app.use(category_route);
+// app.use(brand_route);
+// app.use(product_size_route);
 Relation();
 
 // Handle unauthorized requests
@@ -82,24 +84,24 @@ sequelize
       //..........remove below when done..............///
       //.........create admin role and admin user...........///
       //......this should be removed once it create the admin role and admin user.....///
-      const Role = require("./models/roleModel");
+      // const Role = require("./models/roleModel");
 
-      const addAdminRole = async () => {
-        const isAdmin = await Role.findOne({ where: { role: "admin" } });
-        if (!isAdmin) {
-          await Role.create({
-            role: "admin",
-          });
-        }
-        const isUser = await Role.findOne({ where: { role: "user" } });
-        if (!isUser) {
-          await Role.create({
-            role: "user",
-          });
-        }
-        return;
-      };
-      addAdminRole();
+      // const addAdminRole = async () => {
+      //   const isAdmin = await Role.findOne({ where: { role: "admin" } });
+      //   if (!isAdmin) {
+      //     await Role.create({
+      //       role: "admin",
+      //     });
+      //   }
+      //   const isUser = await Role.findOne({ where: { role: "user" } });
+      //   if (!isUser) {
+      //     await Role.create({
+      //       role: "user",
+      //     });
+      //   }
+      //   return;
+      // };
+      // addAdminRole();
       //................. should be removed after the first excution..........///
       //................remove above when done.............................
       console.log(`Listening on port ${port}`);
