@@ -29,12 +29,13 @@ const { addInitialProduct } = require('./helper/initial_product')
 const { googlePassport } = require("./auth/google");
 const Relation = require("./models/relation.model");
 
-process.env["NODE_CONFIG_DIR"] = path.join(__dirname, "/config");
 var corsOptions = {
   origin: [
     "http://localhost:8081",
     "https://rxmdsite-production.up.railway.app",
-    "http://localhost:7000"],
+    "http://localhost:7000",
+    "https://shielded-citadel-34904.herokuapp.com"
+  ]
 };
 
 app.use(cors(corsOptions));
