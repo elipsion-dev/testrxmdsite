@@ -66,6 +66,9 @@
     <a href="/checkout">Telehealth &amp; Labs</a>
   </li>
   <li class="menu-item">
+    <a id="account_page" class="d-none" href="/account">Account</a>
+  </li>
+  <li class="menu-item">
     <a class="d-none" href="/dashboard" id="admin_link">Admin Dashboard</a>
   </li>
   <li class="menu-item">
@@ -120,12 +123,12 @@
                     class="icon-box text-center iconbox-theme-colored1 animate-icon-on-hover animate-icon-rotate mb-50">
                     <div class="icon-box-wrapper">
                       <div class="icon-wrapper mb-30">
-                        <a href="tel:812-296-6499" class="icon icon-type-font-icon icon-dark icon-circled">
+                        <div class="icon icon-type-font-icon icon-dark icon-circled">
                           <i class="flaticon-contact-044-call-1"></i>
-                        </a>
+                        </div>
                       </div>
                       <div class="icon-text">
-                        <a href="tel:812-296-6499" class="contact-add-link">
+                        <a href="tel:812-296-6499">
                           <h5 class="icon-box-title mt-0">Phone</h5>
                           <div class="content">(812) 296-6499</div>
                         </a>
@@ -139,14 +142,14 @@
                     class="icon-box text-center iconbox-theme-colored1 animate-icon-on-hover animate-icon-rotate mb-50">
                     <div class="icon-box-wrapper">
                       <div class="icon-wrapper mb-30">
-                        <a href="mailto:Info@TestRxMD.com" class="icon icon-type-font-icon icon-dark icon-circled"> <i
-                            class="flaticon-contact-043-email-1"></i>
-                        </a>
+                        <div class="icon icon-type-font-icon
+                        icon-dark icon-circled"> <i class="flaticon-contact-043-email-1"></i>
+                        </div>
                       </div>
                       <div class="icon-text">
-                        <a href="mailto:Info@TestRxMD.com" class="contact-add-link">
+                        <a href="#contact_form" class="contact-add-link" style="cursor:hand">
                           <h5 class="icon-box-title mt-0">Email</h5>
-                          <div class="content">Info@TestRxMD.com</div>
+                          <div class="content">Send Us A Message</div>
                         </a>
                       </div>
                       <div class="clearfix"></div>
@@ -158,12 +161,11 @@
                     class="icon-box text-center iconbox-theme-colored1 animate-icon-on-hover animate-icon-rotate mb-50">
                     <div class="icon-box-wrapper">
                       <div class="icon-wrapper mb-30">
-                        <a href="https://goo.gl/maps/yY7jJaMh5f8JuRQ27"
-                          class="icon icon-type-font-icon icon-dark icon-circled"> <i
-                            class="flaticon-contact-025-world"></i> </a>
+                        <div class="icon icon-type-font-icon icon-dark icon-circled"> <i
+                            class="flaticon-contact-025-world"></i> </div>
                       </div>
                       <div class="icon-text">
-                        <a href="https://goo.gl/maps/yY7jJaMh5f8JuRQ27" class="contact-add-link">
+                        <a href="https://goo.gl/maps/yY7jJaMh5f8JuRQ27">
                           <h5 class="icon-box-title mt-0">Address</h5>
                           <div class="content">3005 N National Rd, Columbus, IN 47201</div>
                         </a>
@@ -180,12 +182,12 @@
         <!-- preloading -->
         <div id="loading">
           <div class="col-3 load-cont">
-          <div class="snippet" data-title="dot-pulse">
+            <div class="snippet" data-title="dot-pulse">
               <div class="stage">
                 <div class="dot-pulse"></div>
               </div>
             </div>
-        </div>
+          </div>
         </div>
         <!-- end preloading -->
         <!-- Section: Contact -->
@@ -252,7 +254,8 @@
                     </div>
                     <div class="mb-3 tm-sc-button">
                       <input name="form_botcheck" id="form_botcheck" class="form-control" type="hidden" value="" />
-                      <button id="submit_contact_form" type="submit" class="btn btn-theme-colored1 btn-hover-strong-color btn-flat btn-block"
+                      <button id="submit_contact_form" type="submit"
+                        class="btn btn-theme-colored1 btn-hover-strong-color btn-flat btn-block"
                         data-loading-text="Please wait...">
                         <span id="contact_text">Send your message</span>
                         <span id="contact_text_spin" class="d-none">
@@ -264,18 +267,20 @@
                   </form>
                   <div class="text-center">
                     <ul class="styled-icons icon-dark icon-lg icon-circled">
-                      <li><a class="social-link" href="https://www.facebook.com/testrxmd"><i
-                            class="fab fa-facebook"></i></a></li>
-                      <li><a class="social-link" href="https://www.instagram.com/testrxmd/"><i
-                            class="fab fa-instagram"></i></a>
+                      <li><a class="social-link hover_color" href="https://www.facebook.com/testrxmd"><i
+                            class="fab fa-facebook fa-1x"></i></a></li>
+                      <li><a class="social-link hover_color" href="https://www.instagram.com/testrxmd/"><i
+                            class="fab fa-instagram fa-1x"></i></a>
                       </li>
-                      <li><a class="social-link" href="mailto:info@testrxmd"><i class="fa fa-envelope"></i></a>
+                      <li><a class="social-link hover_color" href="mailto:info@testrxmd"><i
+                            class="fa fa-envelope fa-1x"></i></a>
                       </li>
-                      <li><a class="social-link" href="tel:812-296-6499"><i class="fa fa-phone"></i></a></li>
+                      <li><a class="social-link hover_color" href="tel:812-296-6499"><i
+                            class="fa fa-phone fa-1x"></i></a></li>
                       </li>
-                      <li><a class="social-link"
+                      <li><a class="social-link hover_color"
                           href="https://www.google.com/maps/place/TestRx+MD/@39.2296795,-85.8986729,15z/data=!4m5!3m4!1s0x0:0x90ff532080fce25a!8m2!3d39.2296795!4d-85.8986729"><i
-                            class="fab fa-google"></i></a></li>
+                            class="fab fa-google fa-1x"></i></a></li>
                       </li>
                     </ul>
                   </div>
@@ -300,42 +305,11 @@
                       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                   </div>
-                  <!--  -->
-
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
-
-        <!-- Contact Form Validation-->
-        <!-- <script>
-          (function ($) {
-            $("#contact_form").validate({
-              submitHandler: function (form) {
-                var form_btn = $(form).find('button[type="submit"]');
-                var form_result_div = '#form-result';
-                $(form_result_div).remove();
-                form_btn.before('<div id="form-result" class="alert alert-success" role="alert" style="display: none;"></div>');
-                var form_btn_old_msg = form_btn.html();
-                form_btn.html(form_btn.prop('disabled', true).data("loading-text"));
-                $(form).ajaxSubmit({
-                  dataType: 'json',
-                  success: function (data) {
-                    if (data.status === 'true') {
-                      $(form).find('.form-control').val('');
-                    }
-                    form_btn.prop('disabled', false).html(form_btn_old_msg);
-                    $(form_result_div).html(data.message).fadeIn('slow');
-                    setTimeout(function () { $(form_result_div).fadeOut('slow') }, 6000);
-                  }
-                });
-              }
-            });
-          })(jQuery); -->
-        <!-- </script> -->
-
-      </div>
-      </div>
-      </div>
-      </div>
-      </section>
       </div>
       <!-- end main-content -->
       <%- include('../partials/footer') %>
@@ -343,8 +317,8 @@
         <!-- Footer Scripts -->
         <!-- JS | Custom script for all pages -->
         <script src="js/custom.js"></script>
+        <script src="js/api_call.js"></script>
 
     </body>
 
 </html>
-<script src="js/api_call.js"></script>

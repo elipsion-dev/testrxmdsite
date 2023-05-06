@@ -18,13 +18,14 @@ const user_route = require("./routes/userRoutes");
 const role_route = require("./routes/roleRoutes");
 const order_route = require("./routes/orderRoutes");
 const order_product_route = require("./routes/orderproductRoutes");
-const payment_route = require("./routes/paymentRoutes");
+const chat_route = require("./routes/gptRoute");
 const product_route = require("./routes/productRoutes");
-// const product_size_route = require("./routes/productsizeRoutes");
+const payment_info_route = require("./routes/paymentInfoRoutes")
+const patient_info = require("./routes/patientInfoRoutes");
 // const shipping_route = require("./routes/shippingRoutes");
 // const brand_route = require("./routes/brandRoutes");
 // const category_route = require("./routes/categoryRoutes");
-const {addInitialProduct}=require('./helper/initial_product')
+const { addInitialProduct } = require('./helper/initial_product')
 const { googlePassport } = require("./auth/google");
 const Relation = require("./models/relation.model");
 
@@ -46,7 +47,15 @@ app.use(express.static(path.join(__dirname, "../public")));
 app.use("/node", express.static(path.join(__dirname, "../node_modules")));
 
 // Middleware
-app.use(express.json());
+// app.use(express.json());
+app.use((req, res, next) => {
+  console.log(req.originalUrl)
+  if (req.originalUrl === '/paymentwebhook') {
+    next();
+  } else {
+    express.json()(req, res, next);
+  }
+});
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
@@ -58,8 +67,11 @@ app.set("view engine", "ejs");
 app.use(user_route);
 app.use(role_route);
 app.use(product_route);
+app.use(chat_route);
 app.use(order_product_route);
 app.use(order_route);
+app.use(payment_info_route);
+app.use(patient_info);
 app.use(view_route);
 
 // UNUSED SHOP ROUTES FOR LATER

@@ -30,6 +30,7 @@
 
   <!-- CSS | menuzord megamenu skins -->
   <link href="js/menuzord/css/menuzord.css" rel="stylesheet" />
+  <link href="css/tooltip.css" rel="stylesheet" />
 
   <!-- CSS | Main style file -->
   <link href="css/style-main.css" rel="stylesheet" type="text/css">
@@ -43,7 +44,7 @@
 
   <!-- External javascripts -->
   <script src="js/jquery.min.js"></script>
-  <script src="js/popper.min.js"></script>
+  <!-- <script src="js/popper.min.js"></script> -->
   <script src="js/bootstrap.min.js"></script>
   <script src="js/javascript-plugins-bundle.min.js"></script>
   <script src="js/menuzord/js/menuzord.js"></script>
@@ -80,6 +81,9 @@
     </li>
     <li class="menu-item active">
       <a href="#">Telehealth &amp; Labs</a>
+    </li>
+    <li class="menu-item">
+      <a id="account_page" class="d-none" href="/account">Account</a>
     </li>
     <li class="menu-item">
       <a class="d-none" href="/dashboard" id="admin_link">Admin Dashboard</a>
@@ -226,17 +230,17 @@
           </div>
         </div>
       </section>
-        <!-- preloading -->
-        <div id="loading">
-          <div class="col-3 load-cont">
+      <!-- preloading -->
+      <div id="loading">
+        <div class="col-3 load-cont">
           <div class="snippet" data-title="dot-pulse">
-              <div class="stage">
-                <div class="dot-pulse"></div>
-              </div>
+            <div class="stage">
+              <div class="dot-pulse"></div>
             </div>
+          </div>
         </div>
-        </div>
-        <!-- end preloading -->
+      </div>
+      <!-- end preloading -->
       <section>
         <div class="container">
           <div class="section-content">
@@ -279,11 +283,32 @@
                           </tr>
                     </tbody>
                   </table>
+                  <label id="apply_discount_p" for="applyDiscountCheckbox">
+                                      <!-- tolltip -->
+                      <span flow="right" tooltip="You can only get 90% of max discount of product you buy, if you have more you can use next time">
+                        <i class="fas fa-question-circle" ></i></span>                    
+                    Apply My Discount
+                    <input style="font-size: 25px;" type="checkbox" id="applyDiscountCheckbox" value="true">
+                  </label>
+                    
+
                   <div class="d-none text-center" id="select-product-error">
                     <h5 id="select-product-error-text">Please select one or more product</h5>
                   </div>
                 </div>
-                <div class="col-md-12 mt-60">
+
+
+                <div id="check_exist_payment" class="d-none">
+                  <h2>Select a Payment Card</h2>
+                <div id="payment_card_list">
+                </div>
+                <label for="otherPaymentCheckbox">use other payment
+                  <input style="font-size: 25px;" type="checkbox" id="otherPaymentCheckbox" name="otherPayment" value="true">
+                </label>
+                </div>
+              
+
+                <div class="col-md-12 mt-60" id="use_new_payment">
                   <div class="card payment-method">
                     <div class="card-header text-center">
                       <h3>Payment Information</h3>
@@ -329,7 +354,7 @@
                           </SCRIPT>
                           <div class="col-xs-6 col-md-6 pull-right">
                             <div class="form-group px-5 py-3 text-center">
-                              <label>SEC CODE</label>
+                              <label>CVC CODE</label>
                               <input maxlength="4" id="checkout-form-cvc" type="tel" class="form-control"
                                 placeholder="CVC" />
                             </div>
@@ -532,21 +557,26 @@
                                     <label class="form-label" for="checkout-form-zip">Zip Code</label>
                                   </div>
                                 </div>
+                                <div>
+                                <label for="saveCardCheckbox">Save Card Info
+                                  <input style="font-size: 25px;" type="checkbox" id="saveCardCheckbox" name="savePayment" value="true">
+                                </label>
+                              </div>
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                      <div id="complete-order-error" class="d-none text-center"></div>
-                      <div class="panel-footer">
-                        <div class="row text-center py-4">
-                          <div class="col-xs-12">
-                            <button type='submit' id="complete-order" class="btn btn-theme-colored1 btn-lg btn-block">
-                              Complete Order
-                            </button>
-                          </div>
-                        </div>
-                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="complete-order-error" class="d-none text-center"></div>
+                <div class="panel-footer">
+                  <div class="row text-center py-4">
+                    <div class="col-xs-12">
+                      <button type='submit' id="complete-order" class="btn btn-theme-colored1 btn-lg btn-block">
+                        Complete Order
+                      </button>
                     </div>
                   </div>
                 </div>

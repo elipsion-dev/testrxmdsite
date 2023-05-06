@@ -1,7 +1,12 @@
 const User = require("../models/userModel");
+const PaymenInfo=require("../models/paymentInfoModel")
+const Subscription=require("../models/subscriptionModel")
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const speakeasy = require('speakeasy');
 
+const {createSubscriptionFromCustomerProfile}=require('../functions/handlePayment');
+const Affliate = require("../models/affiliateModel");
 const isEmailExist = async (email) => {
   const user = await User.findOne({
     where: { email: email },
@@ -15,19 +20,67 @@ const isPasswordCorrect = async (incomingPassword, existingPassword) => {
   return isMatch;
 };
 
+const get2faVerfication = async (userId) => {
+  const user=await User.findByPk(userId)
+  let secret
+  if(!user.twoFaSecret) {
+  const newSecret = speakeasy.generateSecret();
+  await User.update({ twoFaSecret: newSecret.base32 }, { where: { email: user.email }});
+  secret=newSecret.base32
+  }
+  else{
+    secret=user.twoFaSecret
+  }
+  const otp = speakeasy.totp({
+    secret: secret,
+    encoding: 'base32',
+    window: 180 //in second
+  });
+  return otp
+
+};
+const verify2faVerfication = async (otp,userId) => {
+  const user=await User.findByPk(userId)
+  const isValid = speakeasy.totp.verify({
+    secret: user.twoFaSecret,
+    encoding: 'base32',
+    token: otp, 
+    window: 300 
+  });
+  return isValid
+};
+const deemAffiliate=async(batch_id)=>{
+  await Affliate.update({withdrawalType:"cash",status:"paid"},
+    {where:{batchId:batch_id}})
+}
+const generateOtp=async(userId)=>{
+  const otp=await get2faVerfication(userId)
+  return otp
+}
+const getAffiliatePayableAmount=async(userId)=>{
+  console.log(userId)
+   const result = await Affliate.sum('amount', {
+    where: { affilatorId:userId, withdrawalType:"NA", status:"not paid"}
+  });
+  //  await Affliate.findOne({
+  //   attributes: [
+  //     [sequelize.literal('SUM(amount)'), 'totalAmount']
+  //   ],
+  //   where: { affilatorId:userId, isDeemed: false }
+  // });
+  console.log(result);
+  console.log("total paid")
+  return result
+}
 //check which data to sign
-const issueToken = async function (id, role,email, key) {
-  const token = jwt.sign({ sub: id, role,email }, key, { expiresIn: "24h" });
+const issueToken = async function (id, role,email,rememberme, key,expirey) {
+  const token = jwt.sign({ sub: id, role,email,rememberme }, key, { expiresIn: expirey });
   return token;
 };
 
-const issueLongtimeToken = async function (id, role,email, key) {
-  const token = jwt.sign({ sub: id, role,email }, key, { expiresIn: "720h" });
-  return token;
-};
 
-const isTokenValid = async function (token) {
-  const user = jwt.verify(token, process.env.SECRET, (err, user) => {
+const isTokenValid = async function (token,secret) {
+  const user = jwt.verify(token,secret, (err, user) => {
     if (err) {
       return null;
     }
@@ -67,16 +120,42 @@ const isIntakeFormComplted = async (req) => {
   }
   return false;
 };
+const createSubscription = async (req) => {
+  // const user_id = req?.user?.sub;
+  console.log(req.body)
+  //change here in dev
+  const {paymentId,productId,user_id}=req.body
+
+  const {userProfileId,userProfilePaymentId} = await PaymenInfo.findOne(
+  { where: { userId:user_id,id:paymentId } });
+  if(userProfileId && userProfilePaymentId){
+  const subscriptionId=await createSubscriptionFromCustomerProfile(
+    userProfileId,
+  userProfilePaymentId)
+  return await Subscription.create({
+    productId:productId,
+    userId:user_id,
+    userSubscriptionId:subscriptionId
+  })
+}
+  return null
+};
+
 
 module.exports = {
   isEmailExist,
   isPasswordCorrect,
   isEmailVerified,
   issueToken,
-  issueLongtimeToken,
   hashPassword,
   userIp,
   isUserAdmin,
   isTokenValid,
   isIntakeFormComplted,
+  createSubscription,
+  get2faVerfication,
+  verify2faVerfication,
+  getAffiliatePayableAmount,
+  deemAffiliate,
+  generateOtp
 };

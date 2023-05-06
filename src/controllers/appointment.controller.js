@@ -3,7 +3,7 @@ const path = require("path");
 
 exports.getAppointment = async (req, res, next) => {
   try {
-    const token = req.cookies.access_token;
+    const token = req.cookies.acccess_token;
     await User.update({
       left_appointment:false},
      {where:{id:req?.user?.sub}})
@@ -13,3 +13,7 @@ exports.getAppointment = async (req, res, next) => {
     next(err);
   }
 };
+
+
+
+

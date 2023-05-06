@@ -1,27 +1,33 @@
 const Order = require("../models/orderModel");
 const Orderproduct = require("../models/orderproduct");
 const User = require("../models/userModel");
-const { isUserAdmin, isIntakeFormComplted } = require("../helper/user");
+const { isUserAdmin, isIntakeFormComplted,getAffiliatePayableAmount } = require("../helper/user");
 const Product = require("../models/productModel");
+const PaymenInfo = require("../models/paymentInfoModel");
 const sequelize = require("../models/index");
 const { handleError } = require("../helper/handleError");
-const { chargeCreditCard } = require('../functions/handlePayment');
+const { chargeCreditCard,createCustomerProfile,
+  chargeCreditCardExistingUser} = require('../functions/handlePayment');
 const { sendEmail } = require("../helper/send_email");
 const path = require('path');
-//Unused Shop stuff - save for later
-// const Payment = require("../models/paymentModel");
-// const Shipping = require("../models/shippingModel");
+const Affliate = require("../models/affiliateModel");
+const { Op } = require("sequelize");
 
 exports.createOrder = async (req, res, next) => {
   const t = await sequelize.transaction();
   try {
-    const {payment_detail, product_ordered } = req.body;
+    const {payment_detail, product_ordered,apply_discount } = req.body;
+    const user=await User.findByPk(req?.user?.sub)
     const {cardCode,expirtationDate,cardNumber,billingLastName,
-      email,billingFirstName,address,city,state,zip}=payment_detail
+      email,billingFirstName,address,city,state,zip,
+      save_payment_info,use_exist_payment,customer_payment_profile_id}=payment_detail
+      const allPaymentInfo=await PaymenInfo.findAll({where:{userId:req?.user?.sub}})
+      if(allPaymentInfo.length<1 || !use_exist_payment){
       if(!cardCode||!expirtationDate||!cardNumber||!billingLastName||!
         email||!billingFirstName||!address||!city||!state||!zip){
           handleError("Please fill all field", 400);
         }
+      }
     if (!(await isIntakeFormComplted(req))) {
       handleError("Please complete the registration form", 400);
     }
@@ -35,6 +41,18 @@ exports.createOrder = async (req, res, next) => {
     let is_appointment_exist=false
     let is_renewal=false
     let product_names=[]
+    let is_longterm_prodcut_exist=false
+    let total_affiliate_amount=0
+    const is_commission_paid_before=await Affliate.findOne({
+      where:{
+      affilatorId:user?.affiliatedBy,
+      buyerId:req?.user?.sub,
+      amount: {
+      [Op.not]: 0
+    }
+  }
+})
+     console.log("cpaid before"+is_commission_paid_before)
     for(const prod of product_ordered) {
       const product = await Product.findByPk(prod?.productId);
       product_names.push(product.product_name)
@@ -57,7 +75,52 @@ exports.createOrder = async (req, res, next) => {
         order_product_create,
         { transaction: t }
       );
+      //check if he prev get commission for this user
+      if(product.productCatagory==="long term" && user?.affiliatedBy && !is_commission_paid_before){
+        //get 10 percent of the long term therapy
+        is_longterm_prodcut_exist=true
+        total_affiliate_amount=50
+      }
     }
+  //check if the person was affliated and give commision
+  //for the affliator
+  if(is_longterm_prodcut_exist){
+    const amount=total_affiliate_amount
+    await Affliate.create({
+      amount:amount,
+      affilatorId:user.affiliatedBy,
+      buyerId:user.id,
+      orderId:order.id
+    },{transaction:t})
+  }
+  if(apply_discount)
+  {
+    const discount_amount =await getAffiliatePayableAmount(req?.user?.sub)
+    console.log(discount_amount)
+    if((discount_amount)>(0.9*total_amount)){
+      let paid_from_affiliate=0.9*total_amount
+      total_amount=0.1*total_amount
+      await Affliate.update({
+        status:"paid",withdrawalType:"discount"},
+      {where:{affilatorId:req?.user?.sub,withdrawalType:"NA"},transaction: t })
+      //create for rest value
+      const amount=(discount_amount-paid_from_affiliate)
+      if(amount>0){
+        await Affliate.create({
+          amount:amount,
+          affilatorId:req?.user?.sub,
+          buyerId:req?.user?.sub,
+          orderId:order.id
+        },{transaction:t})
+      }
+    }
+    else{
+      total_amount=total_amount-(Number(discount_amount))
+      await Affliate.update({
+        status:"paid",withdrawalType:"discount"},
+      {where:{affilatorId:req?.user?.sub,withdrawalType:"NA"},transaction: t })
+    }
+  }
     //update the user address info
     await User.update({
      address:address,
@@ -68,7 +131,6 @@ exports.createOrder = async (req, res, next) => {
      appointment:true,
      left_appointment:is_appointment_exist},
     {where:{id:req?.user?.sub},transaction: t })
-
     const payment_info={
      amount:total_amount,
      card_detail:{
@@ -88,12 +150,36 @@ exports.createOrder = async (req, res, next) => {
      country:'USA'
      }
   }
-    const payment_response=await chargeCreditCard(payment_info)
+
+  let payment_response
+  if(save_payment_info){
+    console.log("savep info")
+    const {customerProfileId,customerPaymentProfileId}=await createCustomerProfile(payment_info)
+    await PaymenInfo.create({
+      userId:user.id,
+      userProfileId:customerProfileId,
+      userProfilePaymentId:customerPaymentProfileId,
+      cardLastDigit:`**********${String(cardNumber).slice(-3)}`
+    }, { transaction: t })
+    payment_response=await chargeCreditCardExistingUser(total_amount,customerProfileId,customerPaymentProfileId)
+  }
+  else if(use_exist_payment && allPaymentInfo?.length>0){
+    const paymentInfo=await PaymenInfo.findOne({where:{userProfilePaymentId:customer_payment_profile_id}})
+  if(paymentInfo){
+    payment_response=await chargeCreditCardExistingUser(total_amount,paymentInfo.userProfileId,customer_payment_profile_id)
+  }
+  else{
+    handleError("payment method not found",403)
+  }
+}
+  else{
+      payment_response=await chargeCreditCard(payment_info)
+    }
+ 
     order.transId=payment_response.transId
     order.total_paid_amount=total_amount.toFixed(2)
     await order.save({ transaction: t })
-    await t.commit();
-    const user=await User.findByPk(req?.user?.sub)
+   console.log(payment_response.transId,total_amount.toFixed(2))
     const filePath = path.join(__dirname,"..","..",'public', 'images','testrxmd.gif');
     const mailOptions = {
       from: process.env.EMAIL,
@@ -121,7 +207,8 @@ exports.createOrder = async (req, res, next) => {
       cid: 'unique@kreata.ee' //same cid value as in the html img src
     }]
     };
-    is_appointment_exist&& await sendEmail(mailOptions)
+    is_appointment_exist&& sendEmail(mailOptions)
+    await t.commit();
     if(is_renewal) {
       const mailOptionsRenewal = {
         from: process.env.EMAIL,
@@ -148,6 +235,7 @@ exports.createOrder = async (req, res, next) => {
         cid: 'unique@kreata.eqe' //same cid value as in the html img src
       }]
       };
+
       const mailOptionsAdmin = {
         from: process.env.EMAIL,
         to: ["marufbelete9@gmail.com","beletemaruf@gmail.com"],
@@ -189,18 +277,18 @@ exports.createOrder = async (req, res, next) => {
       attachments: [{
         filename: 'testrxmd.gif',
         path: filePath,
-        cid: 'unique@kreata.eae' //same cid value as in the html img src
+        cid: 'unique@kreata.eae' 
       }]
       };
-      await sendEmail(mailOptionsRenewal);
-      await sendEmail(mailOptionsAdmin)
+      sendEmail(mailOptionsRenewal).then(r=>r).catch(e=>e);
+      sendEmail(mailOptionsAdmin).then(r=>r).catch(e=>e)
   }
-    
-    return res.json({order,is_appointment_exist,product_names});
+    return res.status(201).json({order,is_appointment_exist,product_names});
   } catch (err) {
     await t.rollback();
     next(err);
   }
+  
 };
 
 exports.getOrder = async (req, res, next) => {
@@ -219,8 +307,6 @@ exports.getOrder = async (req, res, next) => {
             attributes: ["id", "product_name", "quantity", "price"],
           },
         ],
-        // page: Number(page) || 1,
-        // paginate: Number(paginate) || 25,
         order: [["order_date", "DESC"]],
       };
       const orders = await Order.findAll(options);
@@ -238,8 +324,6 @@ exports.getOrder = async (req, res, next) => {
           attributes: ["id", "product_name", "quantity", "price"],
         },
       ],
-      // page: Number(page) || 1,
-      // paginate: Number(paginate) || 25,
       order: [["order_date", "DESC"]],
     };
     const orders = await Order.findAll(options);
